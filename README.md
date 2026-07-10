@@ -7,7 +7,7 @@
 
 ---
 
-## 📡 Overview
+## Overview
 
 This project applies exploratory data analysis and statistical modeling to two NUFORC (National UFO Reporting Center) datasets to understand **when, where, and why** UFO sightings get reported — and to build a model that predicts expected sighting rates from location, season, moon phase, and darkness conditions.
 
@@ -15,7 +15,7 @@ This is not a claim about extraterrestrial activity. It's an investigation into 
 
 ---
 
-## 🌍 Datasets
+## Datasets
 
 | File | Rows | Scope | Notes |
 |---|---|---|---|
@@ -23,7 +23,7 @@ This is not a claim about extraterrestrial activity. It's an investigation into 
 | `ufo_data_nuforc.csv` | 1,317 | US only, 2016–2022 | Curated subset — includes population, images |
 | `cities15000.txt` | 23,050 | Global | GeoNames city population lookup (external) |
 
-> ⚠️ Raw data files are excluded from this repository (see `.gitignore`) due to file size. Sources are linked below.
+> Raw data files are excluded from this repository (see `.gitignore`) due to file size. Sources are linked below.
 
 **Data sources:**
 - [NUFORC Sighting Reports](https://nuforc.org/)
@@ -31,7 +31,7 @@ This is not a claim about extraterrestrial activity. It's an investigation into 
 
 ---
 
-## 🔭 Methodology
+## Methodology
 
 ### 1. Exploratory Data Analysis
 - Structure, missingness, and duplicate profiling across both datasets
@@ -59,7 +59,7 @@ Using the `astral` library — pure orbital-mechanics calculation, no external A
 
 ---
 
-## 🧠 Models Used & Why
+## Models Used & Why
 
 The target variable — sighting count per grid cell — is a **non-negative integer count**, not a continuous value. This single fact drives every modeling decision below.
 
@@ -75,7 +75,7 @@ The target variable — sighting count per grid cell — is a **non-negative int
 
 ---
 
-## 🌠 Hypotheses & Results
+## Hypotheses & Results
 
 | Hypothesis | Prediction | Result | Verdict |
 |---|---|---|---|
@@ -88,7 +88,7 @@ The target variable — sighting count per grid cell — is a **non-negative int
 
 ---
 
-## 🎯 Sample Prediction
+## Sample Prediction
 
 ```python
 predict_sightings(lat=33.4484, lng=-112.0740, month=7)   # Phoenix, AZ — July
@@ -100,13 +100,13 @@ predict_sightings(lat=33.4484, lng=-112.0740, month=2)   # Phoenix, AZ — Febru
 
 ---
 
-## 🐛 Notable Engineering Fix
+## Notable Engineering Fix
 
 An early model version produced a **13.8 million predicted sightings** anomaly for the NYC metro grid cell. Root cause: raw (non-transformed) population fed into a log-link GLM caused exponential extrapolation blowup on outlier-scale cities. Fixed via `log1p(population)` transformation — a documented example of diagnosing and correcting a real modeling failure mode.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 <p>
   <img src="https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white" />
@@ -119,27 +119,6 @@ An early model version produced a **13.8 million predicted sightings** anomaly f
 
 ---
 
-## 📁 Project Structure
-
-```
-EDA_Thingie/
-├── eda_1.ipynb          # Primary EDA + modeling (nuforc_reports.csv)
-├── eda_2.ipynb          # Secondary EDA (ufo_data_nuforc.csv)
-├── eda_3.ipynb          # Cross-dataset validation
-├── .gitignore           # Excludes large raw data files
-└── README.md
-```
-
----
-
-## 🚀 Future Work
-
-- **Track A:** Explainable-vs-unexplained binary classifier using airport-proximity features (2016+ subset)
-- Zero-inflated Negative Binomial to handle sparse rural grid cells
-- Full-grid heatmap visualization across all months
-- Socioeconomic correlation analysis (unemployment/education), controlled for population and darkness confounds
-
----
 
 <p align="center">🛸 · 👽 · 🌌 · ✨ · 🪐 · ✨ · 🌌 · 👽 · 🛸</p>
 <p align="center"><sub>Built by Layyana Junaid</sub></p>
