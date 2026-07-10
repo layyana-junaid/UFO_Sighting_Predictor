@@ -1,10 +1,3 @@
-<p align="center">
-    <img src="https://img.shields.io/badge/status-active-8A2BE2?style=for-the-badge" />
-    <img src="https://img.shields.io/badge/python-3.12-4B0082?style=for-the-badge&logo=python&logoColor=white" />
-    <img src="https://img.shields.io/badge/model-negative_binomial-C71585?style=for-the-badge" />
-    <img src="https://img.shields.io/badge/data-NUFORC-191970?style=for-the-badge" />
-  </p>
-
 <h1 align="center">🛸 UFO Sighting Predictor 🌌</h1>
 <p align="center"><i>Statistical modeling of unidentified aerial phenomena reports across the United States</i></p>
 
@@ -61,6 +54,22 @@ Using the `astral` library — pure orbital-mechanics calculation, no external A
 | Overdispersion check | Deviance / df = **9.76** → Poisson assumption violated |
 | Final model | **Negative Binomial Regression** (`statsmodels`) |
 | Features | `log(population)`, `month`, `moon_phase`, `pct_night` |
+
+---
+
+## 🧠 Models Used & Why
+
+The target variable — sighting count per grid cell — is a **non-negative integer count**, not a continuous value. This single fact drives every modeling decision below.
+
+| Model | Considered? | Verdict |
+|---|---|---|
+| **Linear Regression** | ❌ Rejected | Assumes a continuous, unbounded target — can predict nonsensical negative sighting counts. Wrong tool for count data. |
+| **Poisson Regression** | ✅ Fit as baseline | The standard model for count data, but assumes **mean = variance**. Used specifically to *test* that assumption. |
+| **Negative Binomial Regression** | ✅ **Final model** | Poisson's mean=variance assumption failed (dispersion ratio 9.76 — real variance ~10× higher than Poisson expects, driven by extreme hotspot cities like Phoenix/NYC vs. mostly-sparse rural cells). Negative Binomial adds a dispersion parameter to correctly model this, without changing the interpretable, coefficient/p-value-based output needed for hypothesis testing. |
+| **Logistic Regression** | 🔜 Reserved for Track A | Correct tool for a *binary* question ("is this sighting explainable, yes/no") — not used here since this track predicts a count, not a category. |
+| **XGBoost** | ⏸️ Considered, not used | Could offer better raw predictive accuracy and captures non-linear interactions automatically, but sacrifices the interpretable p-values that this project's hypothesis-testing goal depends on. Statsmodels' GLM output directly answers "does population/season/moon/darkness significantly matter?" — XGBoost only gives feature importance, a weaker, non-statistical signal. Kept as a possible future accuracy benchmark, not the core deliverable. |
+
+**Library choice:** `statsmodels` (not `scikit-learn`) — deliberately chosen because this project's goal is *explanation* (which factors significantly drive sighting rates, with p-values) rather than pure prediction accuracy. `statsmodels` surfaces coefficients, standard errors, and p-values directly; `scikit-learn` optimizes for prediction and doesn't expose this by default.
 
 ---
 
