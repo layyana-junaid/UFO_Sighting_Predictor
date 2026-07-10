@@ -1,3 +1,5 @@
+![banner](ufobanner.png)
+
 <h1 align="center">🛸 UFO Sighting Predictor 🌌</h1>
 <p align="center"><i>Statistical modeling of unidentified aerial phenomena reports across the United States</i></p>
 
