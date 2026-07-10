@@ -100,12 +100,6 @@ predict_sightings(lat=33.4484, lng=-112.0740, month=2)   # Phoenix, AZ — Febru
 
 ---
 
-## Notable Engineering Fix
-
-An early model version produced a **13.8 million predicted sightings** anomaly for the NYC metro grid cell. Root cause: raw (non-transformed) population fed into a log-link GLM caused exponential extrapolation blowup on outlier-scale cities. Fixed via `log1p(population)` transformation — a documented example of diagnosing and correcting a real modeling failure mode.
-
----
-
 ## Tech Stack
 
 <p>
